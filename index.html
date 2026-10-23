@@ -184,6 +184,7 @@ label.f input,label.f select,label.f textarea{font:500 15px var(--body);padding:
 .wa-float:focus-visible{outline:3px solid var(--plate);outline-offset:3px}
 @media (max-width:520px){.wa-float span{display:none}.wa-float{padding:13px;}}
 footer{padding-bottom:calc(24px + 70px)}
+.retail{font-size:12px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
 .listed{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
 .rules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:760px){.rules{grid-template-columns:1fr}}
@@ -684,11 +685,12 @@ function renderCars(){
       <div class="body">
         <h3>${c.year} ${esc(c.make)}<small>${esc(c.model)}</small></h3>
         <span class="chip ${e.cls}">${e.txt}</span>
-        <dl class="specs"><dt>${esc(c.priceLabel||"Starting bid")}</dt><dd>${zar(c.price)}<br><small style="color:var(--ink);font-weight:600">${r2u(c.price)}</small><br><small style="color:var(--warn);font-weight:600">+ fees &amp; VAT if won</small></dd>${c.retail?`<dt>Est. retail value</dt><dd>${zar(c.retail)}<br><small style="color:var(--muted);font-weight:500">${r2u(c.retail)}</small></dd>`:""}${c.km?`<dt>Mileage</dt><dd>${Number(c.km).toLocaleString("en-ZA").replace(/,/g," ")} km</dd>`:""}${c.yard?`<dt>Location</dt><dd>${esc(c.yard)}</dd>`:""}${c.spec?`<dt>Fuel · box</dt><dd>${esc(c.spec)}</dd>`:""}${c.engine?`<dt>Engine</dt><dd>${esc(c.engine)}</dd>`:""}${c.colour?`<dt>Colour</dt><dd>${esc(c.colour)}</dd>`:""}</dl>
+        <dl class="specs"><dt>${esc(c.priceLabel||"Starting bid")}</dt><dd>${zar(c.price)}<br><small style="color:var(--ink);font-weight:600">${r2u(c.price)}</small><br><small style="color:var(--warn);font-weight:600">+ fees &amp; VAT if won</small></dd>${c.km?`<dt>Mileage</dt><dd>${Number(c.km).toLocaleString("en-ZA").replace(/,/g," ")} km</dd>`:""}${c.yard?`<dt>Location</dt><dd>${esc(c.yard)}</dd>`:""}${c.spec?`<dt>Fuel · box</dt><dd>${esc(c.spec)}</dd>`:""}${c.engine?`<dt>Engine</dt><dd>${esc(c.engine)}</dd>`:""}${c.colour?`<dt>Colour</dt><dd>${esc(c.colour)}</dd>`:""}</dl>
         ${c.cond==="repo" ? `<span class="chip ok">Bank repossessed</span>` : ""}
         ${outsideJhb(c) ? `<span class="chip warn">Outside Jhb: transport to Jhb extra, quoted before bidding</span>` : ""}
         ${c.damage ? `<span class="chip ${/^none/i.test(c.damage) ? "ok" : "warn"}">Damage: ${esc(c.damage)}</span>` : ""}
         <p class="remarks">${esc(c.notes)}</p>
+        ${c.retail ? `<p class="retail">For reference only: this model sells for about ${zar(c.retail)} (${r2u(c.retail)}) in good condition in South Africa. It is not the auction price.</p>` : ""}
         <p class="listed">Listed for viewing only. Sold through an official SA auction; we bid on your behalf.</p>
       </div>
       <div class="actions">
