@@ -5,8 +5,8 @@
    Only change the numbers or words between quotes. Keep the commas.
    ===================================================================== */
 const CONFIG = {
-  fx: 18.5,                   // EXCHANGE RATE: rand per US$1. You set this yourself.
-  fxUpdated: "22 Oct 2026",   // the date you last changed the rate
+  fx: 16.20,                   // EXCHANGE RATE: rand per US$1. You set this yourself.
+  fxUpdated: "23 Oct 2026",   // the date you last changed the rate
 
   whatsapp: "263775914241",   // WhatsApp number, country code first, no + or spaces
   ecocash: { number: "077 591 4241", name: "Manuel Dube" }, // EcoCash for deposits
