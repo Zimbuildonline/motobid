@@ -185,6 +185,15 @@ label.f input,label.f select,label.f textarea{font:500 15px var(--body);padding:
 @media (max-width:520px){.wa-float span{display:none}.wa-float{padding:13px;}}
 footer{padding-bottom:calc(24px + 70px)}
 .retail{font-size:12px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+.span2{grid-column:1/-1}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:var(--brand);text-decoration:underline;cursor:pointer}
+.modal{position:fixed;inset:0;z-index:40;background:rgba(10,16,15,.55);display:flex;align-items:flex-end;justify-content:center;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px))}
+@media (min-width:640px){.modal{align-items:center}}
+.sheet{background:var(--surface);color:var(--ink);border-radius:14px;width:100%;max-width:440px;max-height:90vh;overflow:auto;padding:18px;display:grid;gap:12px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sheet-head h2{font-size:28px}
+.x{background:var(--sunk);color:var(--ink);border-radius:50%;width:38px;height:38px;padding:0;font-size:24px;line-height:1}
+.bc-in input{font:600 22px var(--body);padding:12px;border-radius:8px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);text-align:right}
 .listed{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:8px}
 .rules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:760px){.rules{grid-template-columns:1fr}}
@@ -209,7 +218,7 @@ footer a{color:var(--brand-ink)}
   <div class="wrap">
     <div class="logo"><span class="plate">ZW</span> MotoBid</div>
     <nav aria-label="Main">
-      <a href="#cars">Cars</a><a href="#calc">Cost calculator</a><a href="#fees">Fees</a><a href="#rules">Import rules</a>
+      <a href="#cars">Cars</a><a href="#" data-calc>Calculate bid</a><a href="#calc">Landed cost</a><a href="#fees">Fees</a><a href="#rules">Import rules</a>
     </nav>
     <a class="btn btn-plate" id="hdrWa" href="#bid" style="padding:9px 12px;font-size:14px">Request a bid</a>
   </div>
@@ -361,7 +370,7 @@ footer a{color:var(--brand-ink)}
     <div class="sec-head"><h2>Our fees</h2></div>
     <div class="fees">
       <div class="fee"><span class="eyebrow">Before we bid</span><span class="amt" id="fDep"></span><h3>Refundable deposit</h3><p>Secures your bid and counts toward the car if we win. Refunded in full, or kept for your next car, if we're outbid. <strong>Lost if you win and don't pay the balance within 48 hours</strong>, because the auction penalises late payment.</p></div>
-      <div class="fee hl"><span class="eyebrow">Only if we win</span><span class="amt" id="fFee"></span><h3>Sourcing fee</h3><p>Of the full SA auction total: your winning bid plus handling, admin, buyer&#39;s premium and VAT. Covers registration, bidding, payment to the auction, collection and paperwork.</p></div>
+      <div class="fee hl"><span class="eyebrow">Only if we win</span><span class="amt">Included</span><h3>Our service fee</h3><p>Built into the handling, admin and buyer&#39;s premium charges. There is no separate commission: what <button class="linkbtn" type="button" data-calc>Calculate bid</button> shows is what the car costs you in South Africa. Covers registration, bidding, payment to the auction, collection and paperwork.</p></div>
       <div class="fee"><span class="eyebrow">Paid at cost</span><span class="amt">At cost</span><h3>Transport &amp; repairs</h3><p>Transport to Beitbridge border post and SA panel beating (if you choose it), passed on with receipts. Clearing, duty and VAT at the border are paid by you. Delivery inland is quoted per car and location.</p></div>
     </div>
     <p class="note" style="margin-top:14px;margin-bottom:0"><strong>Cars outside Johannesburg:</strong> every car is collected to our Johannesburg base before it heads to Beitbridge. If a car is at an auction outside Johannesburg, transport to Jhb is charged extra. We tell you the price before we bid, so you can decide. From Jhb to Beitbridge costs <span id="transNote">R9 500</span> for small cars; bigger vehicles are quoted.</p>
@@ -422,6 +431,17 @@ footer a{color:var(--brand-ink)}
   </section>
 </main>
 
+<div class="modal" id="bc" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="bcTitle">
+    <div class="sheet-head"><h2 id="bcTitle">Calculate bid</h2><button class="x" type="button" id="bcClose" aria-label="Close">×</button></div>
+    <p class="fine" id="bcCar"></p>
+    <p class="fine">Enter a bid to see what you would pay in South Africa if it wins.</p>
+    <label class="f bc-in">Enter your bid (R)<input id="bcBid" type="number" min="0" step="1000" inputmode="numeric"><span class="h" id="bcBidUsd"></span></label>
+    <table class="breakdown" id="bcOut"></table>
+    <p class="fine">Includes all auction charges and our service fee. Not included: transport to Beitbridge, and clearing and duty at the border.</p>
+    <div class="row" id="bcActions" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+  </div>
+</div>
 <a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg class="wa-ic" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4a10.4 10.4 0 0 1-1.7-5.7C5.1 9.9 10 5.2 16 5.2s10.9 4.7 10.9 10.6S22 26.4 16 26.4z"/><path fill="currentColor" d="M22 18.6c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7.1a8.8 8.8 0 0 1-4.4-3.8c-.3-.6.3-.5 1-1.8.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.2 1.3 3.4c.2.2 2.3 3.5 5.6 4.9 2.1.9 2.9 1 4 .8.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5 0-.2-.2-.3-.5-.4z"/></svg><span>Chat on WhatsApp</span></a>
 <footer>
   <div class="wrap">
@@ -518,7 +538,7 @@ const CONFIG = {
   ecocash: { number: "077 591 4241", name: "Manuel Dube" }, // EcoCash for deposits
 
   depositUSD: 500,            // refundable deposit before bidding
-  sourcingPct: 5,             // your sourcing fee: % of the SA auction total (bid + fees + VAT)
+  sourcingPct: 5,             // your commission: % of the SA total, built into the handling, admin and premium charges
 
   auction: {                  // SA auction invoice fees
     docFeeZAR: 3050,          // handling fee
@@ -694,6 +714,7 @@ function renderCars(){
         <p class="listed">Listed for viewing only. Sold through an official SA auction; we bid on your behalf.</p>
       </div>
       <div class="actions">
+        <button class="btn-plate span2" type="button" data-calc="${i}">Calculate bid</button>
         <button class="btn-ghost" type="button" data-cost="${i}">Estimated landed cost</button>
         <button class="btn-main" type="button" data-bid="${i}" ${shut?"disabled style='opacity:.45;cursor:not-allowed'":""}>${c.closed ? "Bidding closed" : "Bid for me"}</button>
       </div>
@@ -715,9 +736,14 @@ function setCalc(c){
   calc();
 }
 function saInvoice(h){
-  const A = CONFIG.auction, k = 1 + A.loadingPct/100;
-  const doc = A.docFeeZAR*k, admin = A.adminFeeZAR*k, premium = h*A.premiumPct/100*k;
-  const vat = (h + doc + admin + premium)*A.vatPct/100;
+  // auction fees + your loading, then your commission spread into the three fees
+  const A = CONFIG.auction, k = 1 + A.loadingPct/100, v = A.vatPct/100;
+  let doc = A.docFeeZAR*k, admin = A.adminFeeZAR*k, premium = h*A.premiumPct/100*k;
+  const base = (h + doc + admin + premium)*(1 + v);
+  const target = base*(1 + CONFIG.sourcingPct/100);
+  const f = (target/(1 + v) - h)/(doc + admin + premium);
+  doc *= f; admin *= f; premium *= f;
+  const vat = (h + doc + admin + premium)*v;
   return {doc, admin, premium, vat, total: h + doc + admin + premium + vat};
 }
 function landed(h, year, trans, fx, dutyPct, agent){
@@ -727,11 +753,10 @@ function landed(h, year, trans, fx, dutyPct, agent){
   const age = NOW_YEAR - year;
   const surtax = age > 5 ? (cif+duty)*0.25 : 0;
   const vat = (cif+duty+surtax)*0.15;
-  const feeZAR = sa.total*CONFIG.sourcingPct/100, feeUSD = feeZAR/fx;
-  const oursZAR = cifZAR + feeZAR, oursUSD = oursZAR/fx;   // paid to MotoBid, up to Beitbridge
+  const oursZAR = cifZAR, oursUSD = oursZAR/fx;   // paid to MotoBid, up to Beitbridge
   const border = duty + surtax + vat + agent;              // paid by the customer at the border
   const total = oursUSD + border;
-  return {feeZAR, feeUSD, oursZAR, oursUSD, border, sa, cifZAR, cif, duty, surtax, vat, total};
+  return {oursZAR, oursUSD, border, sa, cifZAR, cif, duty, surtax, vat, total};
 }
 function calc(){
   const v = Object.fromEntries(calcIds.map(id => [id, parseFloat($(id).value)||0]));
@@ -748,7 +773,6 @@ function calc(){
     <tr><td>SA auction total</td><td>${both(r.sa.total)}</td></tr>
     ${outsideJhb(calcCar) ? `<tr class="sub"><td>+ Transport ${esc(calcCar.yard)} → Jhb</td><td>Quoted before bidding</td></tr>` : ""}
     <tr class="sub"><td>+ Transport Jhb → Beitbridge${calcCar && calcCar.type!=="sedan" ? " (estimate, bigger vehicles quoted)" : ""}</td><td>${both(v.cTrans)}</td></tr>
-    <tr class="sub"><td>+ MotoBid sourcing fee (${CONFIG.sourcingPct}% of SA auction total)</td><td>${both(r.feeZAR)}</td></tr>
     <tr class="total"><td>You pay us</td><td>${usd(r.oursUSD)}</td></tr>
     <tr class="sub"><td>Same amount in rand</td><td>${zar(r.oursZAR)}</td></tr>
     <tr class="sub"><td colspan="2" style="text-align:left">Takes the car to Beitbridge border post</td></tr>
@@ -768,7 +792,7 @@ function fillCarSelect(sel){
   if (sel !== undefined) $("bCar").value = sel;
   if ($("bFindWrap")) $("bFindWrap").hidden = $("bCar").value !== "find";
 }
-function mandate(){ return `I authorise MotoBid Zim to register and bid on my behalf at a South African auction for the car above, up to my maximum bid. I will pay the ${usd(CONFIG.depositUSD)} refundable deposit before bidding. If the bid wins, I will pay the balance within 48 hours of bidding closing, and I understand my deposit is forfeited if I don't. Auction fees, transport to Beitbridge border post and the sourcing fee of ${CONFIG.sourcingPct}% of the SA auction total (bid, fees and VAT) are also payable if the bid wins. I will pay all clearing fees, duty and VAT at the border myself. Delivery beyond Beitbridge is agreed separately. If the vehicle is outside Johannesburg, transport to Johannesburg is extra and will be agreed before bidding. I understand auction cars are sold as is.`; }
+function mandate(){ return `I authorise MotoBid Zim to register and bid on my behalf at a South African auction for the car above, up to my maximum bid. I will pay the ${usd(CONFIG.depositUSD)} refundable deposit before bidding. If the bid wins, I will pay the balance within 48 hours of bidding closing, and I understand my deposit is forfeited if I don't. The auction charges shown in Calculate bid (handling, admin, buyer's premium and VAT, which include MotoBid's service fee) and transport to Beitbridge border post are also payable if the bid wins. I will pay all clearing fees, duty and VAT at the border myself. Delivery beyond Beitbridge is agreed separately. If the vehicle is outside Johannesburg, transport to Johannesburg is extra and will be agreed before bidding. I understand auction cars are sold as is.`; }
 function waLink(msg){ return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`; }
 
 $("bidForm").addEventListener("submit", ev => {
@@ -902,7 +926,7 @@ $("bCar").addEventListener("change", toggleFind);
 function goFind(){ $("bCar").value = "find"; toggleFind(); $("bid").scrollIntoView({behavior:"smooth"}); setTimeout(() => $("bFind").focus({preventScroll:true}), 400); }
 document.addEventListener("click", ev => { if (ev.target.closest("[data-find]")) goFind(); });
 $("sampleNote").hidden = !SAMPLE;
-$("fDep").textContent = usd(CONFIG.depositUSD); $("fFee").textContent = CONFIG.sourcingPct + "%";
+$("fDep").textContent = usd(CONFIG.depositUSD);
 $("transNote").textContent = `${r2u(CONFIG.transportZAR)} (${zar(CONFIG.transportZAR)})`;
 $("mandateText").textContent = mandate();
 $("waShow").textContent = "+" + CONFIG.whatsapp;
@@ -913,15 +937,47 @@ $("bMax").addEventListener("input", () => { const v = +$("bMax").value; $("bMaxU
 $("bWa").href = waLink("Hi MotoBid, I'd like help buying a car at a South African auction.");
 $("waFloat").href = waLink("Hi MotoBid, I'd like help buying a car at a South African auction.");
 (function(){
-  const A = CONFIG.auction, k = 1 + A.loadingPct/100;
+  const ex = 52000, r = saInvoice(ex);
   const html = `<b>Charges added to a winning bid</b>
-    <table><tr><td>Handling fee</td><td>${both(A.docFeeZAR*k)}</td></tr>
-    <tr><td>Admin fee</td><td>${both(A.adminFeeZAR*k)}</td></tr>
-    <tr><td>Buyer's premium</td><td>${+(A.premiumPct*k).toFixed(2)}% of your bid</td></tr>
-    <tr><td>VAT</td><td>${A.vatPct}% on bid + all fees</td></tr></table>
-    <p>Plus our sourcing fee: ${CONFIG.sourcingPct}% of that SA total. Example: a winning bid of ${zar(52000)} (${r2u(52000)}) comes to ${zar(saInvoice(52000).total)} (${r2u(saInvoice(52000).total)}) in South Africa, and our fee is ${zar(saInvoice(52000).total*CONFIG.sourcingPct/100)} (${r2u(saInvoice(52000).total*CONFIG.sourcingPct/100)}). You pay the US$ amounts, at our exchange rate. Transport to Beitbridge comes on top. Clearing and duty at the border are paid by you.</p>`;
+    <p>Example for a bid of ${zar(ex)}:</p>
+    <table><tr><td>Handling fee</td><td>${both(r.doc)}</td></tr>
+    <tr><td>Admin fee</td><td>${both(r.admin)}</td></tr>
+    <tr><td>Buyer's premium</td><td>${both(r.premium)}</td></tr>
+    <tr><td>VAT (${CONFIG.auction.vatPct}%)</td><td>${both(r.vat)}</td></tr>
+    <tr><td><strong>Total</strong></td><td><strong>${both(r.total)}</strong></td></tr></table>
+    <p>These include our service fee. Transport to Beitbridge comes on top; clearing and duty at the border are paid by you. You pay the US$ amounts, at our exchange rate.</p>
+    <button class="btn btn-plate" type="button" data-calc>Calculate bid for any amount</button>`;
   document.querySelectorAll("[data-charges]").forEach(el => el.innerHTML = html);
 })();
+let bcCar = null;
+function bcRender(){
+  const h = +$("bcBid").value || 0, r = saInvoice(h);
+  $("bcBidUsd").textContent = h ? `= ${r2u(h)} at our rate` : "";
+  $("bcOut").innerHTML = `
+    <tr><td>Your bid</td><td>${both(h)}</td></tr>
+    <tr class="sub"><td>Handling fee</td><td>${both(r.doc)}</td></tr>
+    <tr class="sub"><td>Admin fee</td><td>${both(r.admin)}</td></tr>
+    <tr class="sub"><td>Buyer's premium</td><td>${both(r.premium)}</td></tr>
+    <tr class="sub"><td>VAT (${CONFIG.auction.vatPct}%)</td><td>${both(r.vat)}</td></tr>
+    <tr class="total"><td>Total</td><td>${zar(r.total)}</td></tr>
+    <tr class="sub"><td>You pay in US$</td><td><strong>${r2u(r.total)}</strong></td></tr>`;
+}
+function openCalc(i){
+  bcCar = (i !== undefined && i !== "" && CARS[i]) ? CARS[i] : null;
+  $("bcCar").textContent = bcCar ? `REF ${bcCar.lot} · ${bcCar.year} ${bcCar.make} ${bcCar.model} · current bid ${zar(bcCar.price)}` : "";
+  $("bcCar").hidden = !bcCar;
+  $("bcBid").value = bcCar ? bcCar.price : 50000;
+  const idx = bcCar ? CARS.indexOf(bcCar) : "";
+  $("bcActions").innerHTML = bcCar ? `<button class="btn-main" type="button" data-bid="${idx}" ${bcCar.closed?"disabled":""}>Bid for me</button><button class="btn-ghost" type="button" data-cost="${idx}">Estimated landed cost</button>` : `<button class="btn-ghost" type="button" data-find>Find me a car</button>`;
+  bcRender(); $("bc").hidden = false; document.body.style.overflow = "hidden";
+  setTimeout(() => $("bcBid").focus({preventScroll:true}), 50);
+}
+function closeCalc(){ $("bc").hidden = true; document.body.style.overflow = ""; }
+$("bcBid").addEventListener("input", bcRender);
+$("bcClose").addEventListener("click", closeCalc);
+$("bc").addEventListener("click", ev => { if (ev.target.id === "bc" || ev.target.closest("#bcActions button")) closeCalc(); });
+document.addEventListener("keydown", ev => { if (ev.key === "Escape" && !$("bc").hidden) closeCalc(); });
+document.addEventListener("click", ev => { const c = ev.target.closest("[data-calc]"); if (c){ ev.preventDefault(); openCalc(c.dataset.calc); } });
 renderRail(); renderCars(); setCalc(CARS[0]); fillCarSelect();
 </script>
 
