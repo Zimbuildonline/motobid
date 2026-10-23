@@ -370,7 +370,7 @@ footer a{color:var(--brand-ink)}
     <div class="sec-head"><h2>Our fees</h2></div>
     <div class="fees">
       <div class="fee"><span class="eyebrow">Before we bid</span><span class="amt" id="fDep"></span><h3>Refundable deposit</h3><p>Secures your bid and counts toward the car if we win. Refunded in full, or kept for your next car, if we're outbid. <strong>Lost if you win and don't pay the balance within 48 hours</strong>, because the auction penalises late payment.</p></div>
-      <div class="fee hl"><span class="eyebrow">Only if we win</span><span class="amt">Included</span><h3>Our service fee</h3><p>Built into the handling, admin and buyer&#39;s premium charges. There is no separate commission: what <button class="linkbtn" type="button" data-calc>Calculate bid</button> shows is what the car costs you in South Africa. Covers registration, bidding, payment to the auction, collection and paperwork.</p></div>
+      <div class="fee hl"><span class="eyebrow">Only if we win</span><span class="amt">5%</span><h3>Sourcing fee</h3><p>5% of the auction total: your winning bid plus handling, admin, buyer&#39;s premium and VAT. Shown as its own line in <button class="linkbtn" type="button" data-calc>Calculate bid</button>. Covers registration, bidding, payment to the auction, collection and paperwork.</p></div>
       <div class="fee"><span class="eyebrow">Paid at cost</span><span class="amt">At cost</span><h3>Transport &amp; repairs</h3><p>Transport to Beitbridge border post and SA panel beating (if you choose it), passed on with receipts. Clearing, duty and VAT at the border are paid by you. Delivery inland is quoted per car and location.</p></div>
     </div>
     <p class="note" style="margin-top:14px;margin-bottom:0"><strong>Cars outside Johannesburg:</strong> every car is collected to our Johannesburg base before it heads to Beitbridge. If a car is at an auction outside Johannesburg, transport to Jhb is charged extra. We tell you the price before we bid, so you can decide. From Jhb to Beitbridge costs <span id="transNote">R9 500</span> for small cars; bigger vehicles are quoted.</p>
@@ -438,7 +438,7 @@ footer a{color:var(--brand-ink)}
     <p class="fine">Enter a bid to see what you would pay in South Africa if it wins.</p>
     <label class="f bc-in">Enter your bid (R)<input id="bcBid" type="number" min="0" step="1000" inputmode="numeric"><span class="h" id="bcBidUsd"></span></label>
     <table class="breakdown" id="bcOut"></table>
-    <p class="fine">Includes all auction charges and our service fee. Not included: transport to Beitbridge, and clearing and duty at the border.</p>
+    <p class="fine">Includes all auction charges and our 5% sourcing fee. Not included: transport to Beitbridge, and clearing and duty at the border.</p>
     <div class="row" id="bcActions" style="display:flex;flex-wrap:wrap;gap:8px"></div>
   </div>
 </div>
@@ -538,7 +538,7 @@ const CONFIG = {
   ecocash: { number: "077 591 4241", name: "Manuel Dube" }, // EcoCash for deposits
 
   depositUSD: 500,            // refundable deposit before bidding
-  sourcingPct: 5,             // your commission: % of the SA total, built into the handling, admin and premium charges
+  sourcingPct: 5,             // your sourcing fee: % of the SA auction total (bid + fees + VAT), shown as its own line
 
   auction: {                  // SA auction invoice fees
     docFeeZAR: 3050,          // handling fee
@@ -736,15 +736,13 @@ function setCalc(c){
   calc();
 }
 function saInvoice(h){
-  // auction fees + your loading, then your commission spread into the three fees
+  // auction fees + your loading, VAT, then your sourcing fee as its own line
   const A = CONFIG.auction, k = 1 + A.loadingPct/100, v = A.vatPct/100;
-  let doc = A.docFeeZAR*k, admin = A.adminFeeZAR*k, premium = h*A.premiumPct/100*k;
-  const base = (h + doc + admin + premium)*(1 + v);
-  const target = base*(1 + CONFIG.sourcingPct/100);
-  const f = (target/(1 + v) - h)/(doc + admin + premium);
-  doc *= f; admin *= f; premium *= f;
+  const doc = A.docFeeZAR*k, admin = A.adminFeeZAR*k, premium = h*A.premiumPct/100*k;
   const vat = (h + doc + admin + premium)*v;
-  return {doc, admin, premium, vat, total: h + doc + admin + premium + vat};
+  const total = h + doc + admin + premium + vat;          // SA auction total
+  const fee = total*CONFIG.sourcingPct/100;               // MotoBid sourcing fee
+  return {doc, admin, premium, vat, total, fee, grand: total + fee};
 }
 function landed(h, year, trans, fx, dutyPct, agent){
   const sa = saInvoice(h);
@@ -753,7 +751,7 @@ function landed(h, year, trans, fx, dutyPct, agent){
   const age = NOW_YEAR - year;
   const surtax = age > 5 ? (cif+duty)*0.25 : 0;
   const vat = (cif+duty+surtax)*0.15;
-  const oursZAR = cifZAR, oursUSD = oursZAR/fx;   // paid to MotoBid, up to Beitbridge
+  const oursZAR = cifZAR + sa.fee, oursUSD = oursZAR/fx;   // paid to MotoBid, up to Beitbridge
   const border = duty + surtax + vat + agent;              // paid by the customer at the border
   const total = oursUSD + border;
   return {oursZAR, oursUSD, border, sa, cifZAR, cif, duty, surtax, vat, total};
@@ -773,6 +771,7 @@ function calc(){
     <tr><td>SA auction total</td><td>${both(r.sa.total)}</td></tr>
     ${outsideJhb(calcCar) ? `<tr class="sub"><td>+ Transport ${esc(calcCar.yard)} → Jhb</td><td>Quoted before bidding</td></tr>` : ""}
     <tr class="sub"><td>+ Transport Jhb → Beitbridge${calcCar && calcCar.type!=="sedan" ? " (estimate, bigger vehicles quoted)" : ""}</td><td>${both(v.cTrans)}</td></tr>
+    <tr class="sub"><td>+ MotoBid sourcing fee (${CONFIG.sourcingPct}% of SA auction total)</td><td>${both(r.sa.fee)}</td></tr>
     <tr class="total"><td>You pay us</td><td>${usd(r.oursUSD)}</td></tr>
     <tr class="sub"><td>Same amount in rand</td><td>${zar(r.oursZAR)}</td></tr>
     <tr class="sub"><td colspan="2" style="text-align:left">Takes the car to Beitbridge border post</td></tr>
@@ -792,7 +791,7 @@ function fillCarSelect(sel){
   if (sel !== undefined) $("bCar").value = sel;
   if ($("bFindWrap")) $("bFindWrap").hidden = $("bCar").value !== "find";
 }
-function mandate(){ return `I authorise MotoBid Zim to register and bid on my behalf at a South African auction for the car above, up to my maximum bid. I will pay the ${usd(CONFIG.depositUSD)} refundable deposit before bidding. If the bid wins, I will pay the balance within 48 hours of bidding closing, and I understand my deposit is forfeited if I don't. The auction charges shown in Calculate bid (handling, admin, buyer's premium and VAT, which include MotoBid's service fee) and transport to Beitbridge border post are also payable if the bid wins. I will pay all clearing fees, duty and VAT at the border myself. Delivery beyond Beitbridge is agreed separately. If the vehicle is outside Johannesburg, transport to Johannesburg is extra and will be agreed before bidding. I understand auction cars are sold as is.`; }
+function mandate(){ return `I authorise MotoBid Zim to register and bid on my behalf at a South African auction for the car above, up to my maximum bid. I will pay the ${usd(CONFIG.depositUSD)} refundable deposit before bidding. If the bid wins, I will pay the balance within 48 hours of bidding closing, and I understand my deposit is forfeited if I don't. The auction charges shown in Calculate bid (handling, admin, buyer's premium and VAT), MotoBid's sourcing fee of ${CONFIG.sourcingPct}% of the auction total, and transport to Beitbridge border post are also payable if the bid wins. I will pay all clearing fees, duty and VAT at the border myself. Delivery beyond Beitbridge is agreed separately. If the vehicle is outside Johannesburg, transport to Johannesburg is extra and will be agreed before bidding. I understand auction cars are sold as is.`; }
 function waLink(msg){ return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`; }
 
 $("bidForm").addEventListener("submit", ev => {
@@ -944,8 +943,10 @@ $("waFloat").href = waLink("Hi MotoBid, I'd like help buying a car at a South Af
     <tr><td>Admin fee</td><td>${both(r.admin)}</td></tr>
     <tr><td>Buyer's premium</td><td>${both(r.premium)}</td></tr>
     <tr><td>VAT (${CONFIG.auction.vatPct}%)</td><td>${both(r.vat)}</td></tr>
-    <tr><td><strong>Total</strong></td><td><strong>${both(r.total)}</strong></td></tr></table>
-    <p>These include our service fee. Transport to Beitbridge comes on top; clearing and duty at the border are paid by you. You pay the US$ amounts, at our exchange rate.</p>
+    <tr><td>Auction total</td><td>${both(r.total)}</td></tr>
+    <tr><td>MotoBid sourcing fee (${CONFIG.sourcingPct}%)</td><td>${both(r.fee)}</td></tr>
+    <tr><td><strong>Total</strong></td><td><strong>${both(r.grand)}</strong></td></tr></table>
+    <p>Our sourcing fee is ${CONFIG.sourcingPct}% of the auction total. Transport to Beitbridge comes on top; clearing and duty at the border are paid by you. You pay the US$ amounts, at our exchange rate.</p>
     <button class="btn btn-plate" type="button" data-calc>Calculate bid for any amount</button>`;
   document.querySelectorAll("[data-charges]").forEach(el => el.innerHTML = html);
 })();
@@ -959,8 +960,10 @@ function bcRender(){
     <tr class="sub"><td>Admin fee</td><td>${both(r.admin)}</td></tr>
     <tr class="sub"><td>Buyer's premium</td><td>${both(r.premium)}</td></tr>
     <tr class="sub"><td>VAT (${CONFIG.auction.vatPct}%)</td><td>${both(r.vat)}</td></tr>
-    <tr class="total"><td>Total</td><td>${zar(r.total)}</td></tr>
-    <tr class="sub"><td>You pay in US$</td><td><strong>${r2u(r.total)}</strong></td></tr>`;
+    <tr><td>Auction total</td><td>${both(r.total)}</td></tr>
+    <tr class="sub"><td>MotoBid sourcing fee (${CONFIG.sourcingPct}%)</td><td>${both(r.fee)}</td></tr>
+    <tr class="total"><td>Total</td><td>${zar(r.grand)}</td></tr>
+    <tr class="sub"><td>You pay in US$</td><td><strong>${r2u(r.grand)}</strong></td></tr>`;
 }
 function openCalc(i){
   bcCar = (i !== undefined && i !== "" && CARS[i]) ? CARS[i] : null;
