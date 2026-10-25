@@ -248,7 +248,7 @@ footer a{color:var(--brand-ink)}
 
   <section class="wrap" id="cars">
     <div class="sec-head">
-      <div><h2>Cars on auction now</h2><p class="fine" style="margin-top:6px">Current bid in rand and US$. The final price is set on auction day.</p></div>
+      <div><h2>Cars on auction now</h2><p class="fine" style="margin-top:6px">Open bid in rand and US$. The final price is set on auction day.</p></div>
       <div class="filters">
         <label class="sr" for="q" hidden>Search</label>
         <input type="search" id="q" placeholder="Search make or model">
@@ -419,7 +419,7 @@ footer a{color:var(--brand-ink)}
           <label class="f">Model<input id="aModel"></label>
           <label class="f">Year<input id="aYear" type="number"></label>
           <label class="f">Mileage (km)<input id="aKm" type="number"></label>
-          <label class="f">Current bid (R)<input id="aPrice" type="number"></label>
+          <label class="f">Open bid (R)<input id="aPrice" type="number"></label>
           <label class="f">Est. retail value (R)<input id="aRetail" type="number"></label>
           <label class="f">Closes<span class="h">2026-10-28 14:00</span><input id="aClose" placeholder="2026-10-28 14:00"></label>
           <label class="f">Location (city)<input id="aYard"></label>
@@ -472,8 +472,7 @@ footer a{color:var(--brand-ink)}
 #   Type:           sedan, suv, bakkie, minibus, truck or trailer
 #   Condition:      accident or repo
 #   Over 3 tonnes:  yes or no   (yes = the 10-year limit does not apply)
-#   Current bid:    rand, numbers only, e.g. 145000
-#                   (no bids yet? write "Opening bid:" instead of "Current bid:")
+#   Open bid:       rand, numbers only, e.g. 145000
 #   Location:       city where the car is. Anywhere except Johannesburg shows
 #                   "transport to Jhb extra, quoted before bidding".
 #   Closes:         year-month-day hour:minute, e.g. 2026-10-28 14:00
@@ -489,7 +488,7 @@ footer a{color:var(--brand-ink)}
 # Type: bakkie
 # Condition: accident
 # Over 3 tonnes: no
-# Current bid: 145000
+# Open bid: 145000
 # Retail value: 280000
 # Mileage: 120000
 # Fuel / gearbox: Diesel · Manual
@@ -525,7 +524,7 @@ Vehicle: 2018 Volkswagen Tiguan 2.0 TDI
 Type: suv
 Condition: repo
 Over 3 tonnes: no
-Opening bid: 122000
+Open bid: 122000
 Retail value: 367000
 Mileage: 235898
 Fuel / gearbox: Diesel
@@ -543,7 +542,7 @@ Vehicle:
 Type:
 Condition:
 Over 3 tonnes:
-Current bid:
+Open bid:
 Retail value:
 Mileage:
 Fuel / gearbox:
@@ -628,7 +627,7 @@ function parseCars(text){
     out.push({
       lot: f.ref || "", year, make: words.slice(0,n).join(" "), model: words.slice(n).join(" "),
       type, cond: /repo/i.test(f.condition||"") ? "repo" : "accident", heavy: /^y/i.test(f["over 3 tonnes"]||""),
-      price: numOf(f["current bid"] || f["opening bid"]), priceLabel: (f["opening bid"] && !f["current bid"]) ? "Opening bid" : "Current bid", retail: numOf(f["retail value"]),
+      price: numOf(f["open bid"] || f["current bid"] || f["opening bid"]), priceLabel: "Open bid", retail: numOf(f["retail value"]),
       km: numOf(f.mileage), spec: f["fuel / gearbox"] || f["fuel/gearbox"] || "", engine: f.engine || "", colour: f.colour || "",
       yard: f.location || "", closes, closeAt, damage: f.damage || "", notes: f.notes || "", img: f.photo || ""
     });
@@ -903,7 +902,7 @@ $("aForm").addEventListener("submit", ev => {
   $("aOut").textContent = ["=== CAR ===",
     "Ref: "+v("aLot"), "Vehicle: "+[v("aYear"), v("aMake"), v("aModel")].filter(Boolean).join(" "),
     "Type: "+$("aType").value, "Condition: "+$("aCond").value, "Over 3 tonnes: "+$("aHeavy").value,
-    "Current bid: "+v("aPrice"), "Retail value: "+v("aRetail"), "Mileage: "+v("aKm"),
+    "Open bid: "+v("aPrice"), "Retail value: "+v("aRetail"), "Mileage: "+v("aKm"),
     "Fuel / gearbox: "+v("aSpec"), "Engine: "+v("aEngine"), "Colour: "+v("aColour"), "Location: "+v("aYard"),
     "Closes: "+v("aClose"), "Damage: "+v("aDamage"), "Notes: "+v("aNotes").replace(/\n+/g," "), "Photo: "+photo, ""].join("\n");
 });
@@ -968,7 +967,7 @@ function bcRender(){
 }
 function openCalc(i){
   bcCar = (i !== undefined && i !== "" && CARS[i]) ? CARS[i] : null;
-  $("bcCar").textContent = bcCar ? `REF ${bcCar.lot} · ${bcCar.year} ${bcCar.make} ${bcCar.model} · current bid ${zar(bcCar.price)}` : "";
+  $("bcCar").textContent = bcCar ? `REF ${bcCar.lot} · ${bcCar.year} ${bcCar.make} ${bcCar.model} · open bid ${zar(bcCar.price)}` : "";
   $("bcCar").hidden = !bcCar;
   $("bcBid").value = bcCar ? bcCar.price : 50000;
   const idx = bcCar ? CARS.indexOf(bcCar) : "";
