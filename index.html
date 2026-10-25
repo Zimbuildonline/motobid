@@ -473,6 +473,7 @@ footer a{color:var(--brand-ink)}
 #   Condition:      accident or repo
 #   Over 3 tonnes:  yes or no   (yes = the 10-year limit does not apply)
 #   Current bid:    rand, numbers only, e.g. 145000
+#                   (no bids yet? write "Opening bid:" instead of "Current bid:")
 #   Location:       city where the car is. Anywhere except Johannesburg shows
 #                   "transport to Jhb extra, quoted before bidding".
 #   Closes:         year-month-day hour:minute, e.g. 2026-10-28 14:00
@@ -517,6 +518,24 @@ Closes: 2026-10-23
 Damage: Front-end and right side: bonnet, headlight area, front fender and door; rear bumper damaged
 Notes: Code 2. Insurance car. Starts, key available. Selling now.
 Photo: photos/corsa-1043.jpg
+
+=== CAR ===
+Ref: MB-1044
+Vehicle: 2018 Volkswagen Tiguan 2.0 TDI
+Type: suv
+Condition: repo
+Over 3 tonnes: no
+Opening bid: 122000
+Retail value: 367000
+Mileage: 235898
+Fuel / gearbox: Diesel
+Engine: 2.0 L TDI
+Colour: White
+Location: Durban
+Closes: 2026-10-28 11:54
+Damage: Light: front bumper and lower grille damaged, scratches on left front
+Notes: Code 2. Bank repossession. Starts, key available. Registration papers delayed, which can slow down export. No bids yet.
+Photo: photos/tiguan-1044.jpg
 
 === CAR ===
 Ref:
@@ -609,7 +628,7 @@ function parseCars(text){
     out.push({
       lot: f.ref || "", year, make: words.slice(0,n).join(" "), model: words.slice(n).join(" "),
       type, cond: /repo/i.test(f.condition||"") ? "repo" : "accident", heavy: /^y/i.test(f["over 3 tonnes"]||""),
-      price: numOf(f["current bid"]), priceLabel: "Current bid", retail: numOf(f["retail value"]),
+      price: numOf(f["current bid"] || f["opening bid"]), priceLabel: (f["opening bid"] && !f["current bid"]) ? "Opening bid" : "Current bid", retail: numOf(f["retail value"]),
       km: numOf(f.mileage), spec: f["fuel / gearbox"] || f["fuel/gearbox"] || "", engine: f.engine || "", colour: f.colour || "",
       yard: f.location || "", closes, closeAt, damage: f.damage || "", notes: f.notes || "", img: f.photo || ""
     });
