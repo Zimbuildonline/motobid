@@ -1,5 +1,5 @@
 /* =====================================================================
-   MOTOBID SETTINGS
+   ZIMOTOBID SETTINGS
    To change the exchange rate: edit the two lines just below, then tap
    "Commit changes". The site updates in about a minute.
    Only change the numbers or words between quotes. Keep the commas.

@@ -6,7 +6,7 @@
 <meta name="description" content="We bid for you at South African vehicle auctions and bring the car to Beitbridge border post.">
 <style>[hidden]{display:none!important}img{max-width:100%}body{margin:0}</style>
 <meta property="og:type" content="website">
-<meta property="og:title" content="MotoBid Zim: we bid at SA auctions for you">
+<meta property="og:title" content="ZiMotoBid: we bid at SA auctions for you">
 <meta property="og:description" content="Accident-damaged and repossessed cars from South African auctions, delivered to Beitbridge. Pay in US$.">
 <meta property="og:image" content="https://zimotobid.online/photos/share.jpg">
 <meta property="og:url" content="https://zimotobid.online/">
@@ -14,7 +14,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='3' y='12' width='58' height='40' rx='6' fill='%23EDB51E' stroke='%23152120' stroke-width='5'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='700' font-size='26' text-anchor='middle' fill='%23152120'%3EZW%3C/text%3E%3C/svg%3E">
 <meta name="theme-color" content="#0E4D49">
-<title>MotoBid Zim</title>
+<title>ZiMotoBid</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
 <style>
@@ -54,8 +54,8 @@ button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible
 /* header */
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--brand);color:var(--brand-ink)}
 header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
-.logo{font-family:var(--display);font-weight:800;font-size:26px;text-transform:uppercase;letter-spacing:.02em;display:flex;align-items:center;gap:8px}
-.logo .plate{background:var(--plate);color:var(--plate-ink);border-radius:4px;padding:1px 7px;font-size:18px;border:2px solid var(--plate-ink)}
+.logo{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:.01em;display:flex;align-items:center;gap:2px}
+.logo .plate{background:var(--plate);color:var(--plate-ink);border-radius:4px;padding:0 7px;font-size:24px;line-height:1.15;border:2px solid var(--plate-ink)}
 header nav{display:flex;gap:16px;font-weight:600;font-size:14px}
 header nav a{color:var(--brand-ink);text-decoration:none;opacity:.9}
 @media (max-width:640px){header nav{display:none}}
@@ -225,7 +225,7 @@ footer a{color:var(--brand-ink)}
 
 <header>
   <div class="wrap">
-    <div class="logo"><span class="plate">ZW</span> MotoBid</div>
+    <div class="logo" aria-label="ZiMotoBid">ZiMoto<span class="plate">Bid</span></div>
     <nav aria-label="Main">
       <a href="#cars">Cars</a><a href="#" data-calc>Calculate bid</a><a href="#calc">Landed cost</a><a href="#fees">Fees</a><a href="#rules">Import rules</a>
     </nav>
@@ -454,7 +454,7 @@ footer a{color:var(--brand-ink)}
 <a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp"><svg class="wa-ic" viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4a10.4 10.4 0 0 1-1.7-5.7C5.1 9.9 10 5.2 16 5.2s10.9 4.7 10.9 10.6S22 26.4 16 26.4z"/><path fill="currentColor" d="M22 18.6c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7.1a8.8 8.8 0 0 1-4.4-3.8c-.3-.6.3-.5 1-1.8.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.7s1.2 3.2 1.3 3.4c.2.2 2.3 3.5 5.6 4.9 2.1.9 2.9 1 4 .8.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5 0-.2-.2-.3-.5-.4z"/></svg><span>Chat on WhatsApp</span></a>
 <footer>
   <div class="wrap">
-    <span>MotoBid Zim is an independent buying agent. We scout cars at official South African auction houses, list them here for our clients to view, and bid on clients' behalf on the auctions' own platforms. We are not an auction house, do not own the cars listed, and are not affiliated with any auction. Cars are delivered to Beitbridge border post; clearing is the buyer&#39;s responsibility.</span>
+    <span>ZiMotoBid is an independent buying agent. We scout cars at official South African auction houses, list them here for our clients to view, and bid on clients' behalf on the auctions' own platforms. We are not an auction house, do not own the cars listed, and are not affiliated with any auction. Cars are delivered to Beitbridge border post; clearing is the buyer&#39;s responsibility.</span>
     
   </div>
 </footer>
@@ -723,7 +723,7 @@ function saInvoice(h){
   const doc = A.docFeeZAR*k, admin = A.adminFeeZAR*k, premium = h*A.premiumPct/100*k;
   const vat = (h + doc + admin + premium)*v;
   const total = h + doc + admin + premium + vat;          // SA auction total
-  const fee = total*CONFIG.sourcingPct/100;               // MotoBid sourcing fee
+  const fee = total*CONFIG.sourcingPct/100;               // ZiMotoBid sourcing fee
   return {doc, admin, premium, vat, total, fee, grand: total + fee};
 }
 function landed(h, year, trans, fx, dutyPct, agent){
@@ -733,7 +733,7 @@ function landed(h, year, trans, fx, dutyPct, agent){
   const age = NOW_YEAR - year;
   const surtax = age > 5 ? (cif+duty)*0.25 : 0;
   const vat = (cif+duty+surtax)*0.15;
-  const oursZAR = cifZAR + sa.fee, oursUSD = oursZAR/fx;   // paid to MotoBid, up to Beitbridge
+  const oursZAR = cifZAR + sa.fee, oursUSD = oursZAR/fx;   // paid to ZiMotoBid, up to Beitbridge
   const border = duty + surtax + vat + agent;              // paid by the customer at the border
   const total = oursUSD + border;
   return {oursZAR, oursUSD, border, sa, cifZAR, cif, duty, surtax, vat, total};
@@ -753,7 +753,7 @@ function calc(){
     <tr><td>SA auction total</td><td>${both(r.sa.total)}</td></tr>
     ${outsideJhb(calcCar) ? `<tr class="sub"><td>+ Transport ${esc(calcCar.yard)} → Jhb</td><td>Quoted before bidding</td></tr>` : ""}
     <tr class="sub"><td>+ Transport Jhb → Beitbridge${calcCar && calcCar.type!=="sedan" ? " (estimate, bigger vehicles quoted)" : ""}</td><td>${both(v.cTrans)}</td></tr>
-    <tr class="sub"><td>+ MotoBid sourcing fee (${CONFIG.sourcingPct}% of SA auction total)</td><td>${both(r.sa.fee)}</td></tr>
+    <tr class="sub"><td>+ ZiMotoBid sourcing fee (${CONFIG.sourcingPct}% of SA auction total)</td><td>${both(r.sa.fee)}</td></tr>
     <tr class="total"><td>You pay us</td><td>${usd(r.oursUSD)}</td></tr>
     <tr class="sub"><td>Same amount in rand</td><td>${zar(r.oursZAR)}</td></tr>
     <tr class="sub"><td colspan="2" style="text-align:left">Takes the car to Beitbridge border post</td></tr>
@@ -773,7 +773,7 @@ function fillCarSelect(sel){
   if (sel !== undefined) $("bCar").value = sel;
   if ($("bFindWrap")) $("bFindWrap").hidden = $("bCar").value !== "find";
 }
-function mandate(){ return `I authorise MotoBid Zim to register and bid on my behalf at a South African auction for the car above, up to my maximum bid. I will pay the ${usd(CONFIG.depositUSD)} refundable deposit before bidding. If the bid wins, I will pay the balance within 48 hours of bidding closing, and I understand my deposit is forfeited if I don't. The auction charges shown in Calculate bid (handling, admin, buyer's premium and VAT), MotoBid's sourcing fee of ${CONFIG.sourcingPct}% of the auction total, and transport to Beitbridge border post are also payable if the bid wins. I will pay all clearing fees, duty and VAT at the border myself. Delivery beyond Beitbridge is agreed separately. If the vehicle is outside Johannesburg, transport to Johannesburg is extra and will be agreed before bidding. I understand auction cars are sold as is.`; }
+function mandate(){ return `I authorise ZiMotoBid (Manuel Dube) to register and bid on my behalf at a South African auction for the car above, up to my maximum bid. I will pay the ${usd(CONFIG.depositUSD)} refundable deposit before bidding. If the bid wins, I will pay the balance within 48 hours of bidding closing, and I understand my deposit is forfeited if I don't. The auction charges shown in Calculate bid (handling, admin, buyer's premium and VAT), ZiMotoBid's sourcing fee of ${CONFIG.sourcingPct}% of the auction total, and transport to Beitbridge border post are also payable if the bid wins. I will pay all clearing fees, duty and VAT at the border myself. Delivery beyond Beitbridge is agreed separately. If the vehicle is outside Johannesburg, transport to Johannesburg is extra and will be agreed before bidding. I understand auction cars are sold as is.`; }
 function waLink(msg){ return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`; }
 
 $("bidForm").addEventListener("submit", ev => {
@@ -788,7 +788,7 @@ $("bidForm").addEventListener("submit", ev => {
   if (err.length){ $("bErr").textContent = "To continue, " + err.join(", ") + "."; $("bErr").hidden = false; return; }
   $("bErr").hidden = true;
   const carLine = c ? `REF ${c.lot} · ${c.year} ${c.make} ${c.model} (${c.yard}, closes ${c.closes})` + (outsideJhb(c) ? "\nLocation note: outside Jhb, please quote transport to Jhb before bidding" : "") : "Please find me a car: " + $("bFind").value.trim().replace(/\n+/g," ");
-  const msg = `MOTOBID BID REQUEST\n\nCar: ${carLine}\nMaximum bid: ${zar($("bMax").value)} (${usd($("bMax").value/CONFIG.fx)} at R${CONFIG.fx.toFixed(2)}/US$)\nWanted in: ${$("bTo").value}${$("bTo").value.startsWith("Collect") ? "" : " (please quote delivery from Beitbridge)"}\nCondition: ${$("bCond").selectedOptions[0].text}\n${$("bCond").value==="repo" ? "" : "Repair: "+$("bRepair").value+"\n"}\nName: ${$("bName").value.trim()}\nWhatsApp: ${$("bPhone").value.trim()}\nBased in: ${$("bWhere").value}\nDeposit by: ${$("bPay").value} (${usd(CONFIG.depositUSD)}, ref ${c ? c.lot : "FIND"} ${$("bName").value.trim().split(" ").pop()})\n${$("bNotes").value.trim() ? "Notes: "+$("bNotes").value.trim()+"\n" : ""}\nAuthority: ${mandate()}\nAgreed: Yes`;
+  const msg = `ZIMOTOBID BID REQUEST\n\nCar: ${carLine}\nMaximum bid: ${zar($("bMax").value)} (${usd($("bMax").value/CONFIG.fx)} at R${CONFIG.fx.toFixed(2)}/US$)\nWanted in: ${$("bTo").value}${$("bTo").value.startsWith("Collect") ? "" : " (please quote delivery from Beitbridge)"}\nCondition: ${$("bCond").selectedOptions[0].text}\n${$("bCond").value==="repo" ? "" : "Repair: "+$("bRepair").value+"\n"}\nName: ${$("bName").value.trim()}\nWhatsApp: ${$("bPhone").value.trim()}\nBased in: ${$("bWhere").value}\nDeposit by: ${$("bPay").value} (${usd(CONFIG.depositUSD)}, ref ${c ? c.lot : "FIND"} ${$("bName").value.trim().split(" ").pop()})\n${$("bNotes").value.trim() ? "Notes: "+$("bNotes").value.trim()+"\n" : ""}\nAuthority: ${mandate()}\nAgreed: Yes`;
   $("pRef").textContent = `${c ? c.lot : "FIND"} ${$("bName").value.trim().split(" ").pop()}`;
   $("bMsg").textContent = msg; $("bWa").href = waLink(msg);
   $("bOut").scrollIntoView({behavior:"smooth", block:"nearest"});
@@ -911,12 +911,12 @@ $("fDep").textContent = usd(CONFIG.depositUSD);
 $("transNote").textContent = `${r2u(CONFIG.transportZAR)} (${zar(CONFIG.transportZAR)})`;
 $("mandateText").textContent = mandate();
 $("waShow").textContent = "+" + CONFIG.whatsapp;
-$("fxShow").textContent = `R ${CONFIG.fx.toFixed(2)} = US$ 1`; $("fxDate").textContent = `Set by MotoBid · updated ${CONFIG.fxUpdated}`;
+$("fxShow").textContent = `R ${CONFIG.fx.toFixed(2)} = US$ 1`; $("fxDate").textContent = `Set by ZiMotoBid · updated ${CONFIG.fxUpdated}`;
 $("pAmt").textContent = usd(CONFIG.depositUSD); $("pNum").textContent = CONFIG.ecocash.number; $("pName").textContent = CONFIG.ecocash.name;
 $("pCopy").addEventListener("click", () => copyFrom($("pCopy"), $("pNum")));
 $("bMax").addEventListener("input", () => { const v = +$("bMax").value; $("bMaxUsd").textContent = v ? `= ${usd(v/CONFIG.fx)} at our rate` : "The bid itself, before fees"; });
-$("bWa").href = waLink("Hi MotoBid, I'd like help buying a car at a South African auction.");
-$("waFloat").href = waLink("Hi MotoBid, I'd like help buying a car at a South African auction.");
+$("bWa").href = waLink("Hi ZiMotoBid, I'd like help buying a car at a South African auction.");
+$("waFloat").href = waLink("Hi ZiMotoBid, I'd like help buying a car at a South African auction.");
 (function(){
   const ex = 52000, r = saInvoice(ex);
   const html = `<b>Charges added to a winning bid</b>
@@ -926,7 +926,7 @@ $("waFloat").href = waLink("Hi MotoBid, I'd like help buying a car at a South Af
     <tr><td>Buyer's premium</td><td>${both(r.premium)}</td></tr>
     <tr><td>VAT (${CONFIG.auction.vatPct}%)</td><td>${both(r.vat)}</td></tr>
     <tr><td>Auction total</td><td>${both(r.total)}</td></tr>
-    <tr><td>MotoBid sourcing fee (${CONFIG.sourcingPct}%)</td><td>${both(r.fee)}</td></tr>
+    <tr><td>ZiMotoBid sourcing fee (${CONFIG.sourcingPct}%)</td><td>${both(r.fee)}</td></tr>
     <tr><td><strong>Total</strong></td><td><strong>${both(r.grand)}</strong></td></tr></table>
     <p>Our sourcing fee is ${CONFIG.sourcingPct}% of the auction total. Transport to Beitbridge comes on top; clearing and duty at the border are paid by you. You pay the US$ amounts, at our exchange rate.</p>
     <button class="btn btn-plate" type="button" data-calc>Calculate bid for any amount</button>`;
@@ -943,7 +943,7 @@ function bcRender(){
     <tr class="sub"><td>Buyer's premium</td><td>${both(r.premium)}</td></tr>
     <tr class="sub"><td>VAT (${CONFIG.auction.vatPct}%)</td><td>${both(r.vat)}</td></tr>
     <tr><td>Auction total</td><td>${both(r.total)}</td></tr>
-    <tr class="sub"><td>MotoBid sourcing fee (${CONFIG.sourcingPct}%)</td><td>${both(r.fee)}</td></tr>
+    <tr class="sub"><td>ZiMotoBid sourcing fee (${CONFIG.sourcingPct}%)</td><td>${both(r.fee)}</td></tr>
     <tr class="total"><td>Total</td><td>${zar(r.grand)}</td></tr>
     <tr class="sub"><td>You pay in US$</td><td><strong>${r2u(r.grand)}</strong></td></tr>`;
 }
