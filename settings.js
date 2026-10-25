@@ -22,7 +22,7 @@ const CONFIG = {
     loadingPct: 20            // your logistics loading added to the three fees above
   },
 
-  baseCities: ["johannesburg", "jhb", "joburg"], // cars here need no transport to Jhb
+  baseCities: ["johannesburg", "jhb", "joburg", "sandton", "randburg", "midrand"], // cars here need no transport to Jhb
   transportZAR: 9500,         // Jhb to Beitbridge, small cars
   dutyPct: 40,                // customs duty estimate (customer pays)
   agentUSD: 150,              // clearing agent estimate (customer pays)
