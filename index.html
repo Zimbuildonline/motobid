@@ -253,7 +253,7 @@ footer a{color:var(--brand-ink)}
         <label class="sr" for="q" hidden>Search</label>
         <input type="search" id="q" placeholder="Search make or model">
         <select id="type" aria-label="Body type"><option value="">All types</option><option value="sedan">Sedan / hatch</option><option value="suv">SUV</option><option value="bakkie">Bakkie</option><option value="minibus">Minibus / kombi</option><option value="truck">Truck / horse</option><option value="trailer">Trailer</option></select>
-        <select id="cond" aria-label="Condition"><option value="">Any condition</option><option value="accident">Accident-damaged</option><option value="repo">Bank repossessed</option><option value="used">Private seller</option></select>
+        <select id="cond" aria-label="Condition"><option value="">Any condition</option><option value="accident">Accident-damaged</option><option value="repo">Bank repossessed</option><option value="used">Private seller</option><option value="fleet">Ex-fleet / taxi</option></select>
         <label class="toggle"><input type="checkbox" id="onlyOk" checked> Importable only</label>
       </div>
     </div>
@@ -915,6 +915,60 @@ Notes: Code 2. Private seller. Starts, key available. 7-seater. Already has bids
 Photo: photos/tiggo-1066.jpg
 
 === CAR ===
+Ref: MB-1067
+Vehicle: 2022 Foton View CS2 2.4 16-seater
+Type: minibus
+Condition: fleet
+Over 3 tonnes: no
+Open bid: 31000
+Retail value: 629000
+Mileage: 172957
+Fuel / gearbox: Diesel · Manual
+Engine: 2.4 L
+Colour: White
+Location: Pretoria
+Closes: 2026-11-03 10:00
+Damage: None visible in photos
+Notes: Code 2. Ex-taxi fleet kombi. Starts, key available. Live auction Tue 3 Nov at 10:00, so send us your maximum by Mon 2 Nov.
+Photo: photos/foton-1067.jpg
+
+=== CAR ===
+Ref: MB-1068
+Vehicle: 2022 Foton View CS2 2.4 16-seater
+Type: minibus
+Condition: fleet
+Over 3 tonnes: no
+Open bid: 37000
+Retail value: 629000
+Mileage: 167332
+Fuel / gearbox: Diesel · Manual
+Engine: 2.4 L
+Colour: White
+Location: Pretoria
+Closes: 2026-11-03 10:00
+Damage: None visible in photos
+Notes: Code 2. Ex-taxi fleet kombi. Starts, key available. Live auction Tue 3 Nov at 10:00, so send us your maximum by Mon 2 Nov.
+Photo: photos/foton-1068.jpg
+
+=== CAR ===
+Ref: MB-1069
+Vehicle: 2023 Foton View CS2 2.4 16-seater
+Type: minibus
+Condition: accident
+Over 3 tonnes: no
+Open bid: 39000
+Retail value: 629000
+Mileage: 73541
+Fuel / gearbox: Diesel · Manual
+Engine: 2.4 L
+Colour: White
+Location: Pretoria
+Closes: 2026-11-03 10:00
+Damage: Front-left: bumper, headlight area and radiator side damaged
+Notes: Code 2. Ex-taxi fleet kombi, low mileage. Starts, key available. Already has bids, so the price will move. Live auction Tue 3 Nov at 10:00, so send us your maximum by Mon 2 Nov.
+Photo: photos/foton-1069.jpg
+
+=== CAR ===
 Ref:
 Vehicle:
 Type:
@@ -1004,7 +1058,7 @@ function parseCars(text){
     }
     out.push({
       lot: f.ref || "", year, make: words.slice(0,n).join(" "), model: words.slice(n).join(" "),
-      type, cond: /repo/i.test(f.condition||"") ? "repo" : /used|private/i.test(f.condition||"") ? "used" : "accident", heavy: /^y/i.test(f["over 3 tonnes"]||""),
+      type, cond: /repo/i.test(f.condition||"") ? "repo" : /fleet|taxi/i.test(f.condition||"") ? "fleet" : /used|private/i.test(f.condition||"") ? "used" : "accident", heavy: /^y/i.test(f["over 3 tonnes"]||""),
       price: numOf(f["open bid"] || f["current bid"] || f["opening bid"]), priceLabel: "Open bid", retail: numOf(f["retail value"]),
       km: numOf(f.mileage), spec: f["fuel / gearbox"] || f["fuel/gearbox"] || "", engine: f.engine || "", colour: f.colour || "",
       yard: f.location || "", closes, closeAt, damage: f.damage || "", notes: f.notes || "", img: f.photo || ""
@@ -1084,7 +1138,7 @@ function renderCars(){
         <h3>${c.year} ${esc(c.make)}<small>${esc(c.model)}</small></h3>
         <span class="chip ${e.cls}">${e.txt}</span>
         <dl class="specs"><dt>${esc(c.priceLabel||"Starting bid")}</dt><dd>${zar(c.price)}<br><small style="color:var(--ink);font-weight:600">${r2u(c.price)}</small><br><small style="color:var(--warn);font-weight:600">+ fees &amp; VAT if won</small></dd>${c.km?`<dt>Mileage</dt><dd>${Number(c.km).toLocaleString("en-ZA").replace(/,/g," ")} km</dd>`:""}${c.yard?`<dt>Location</dt><dd>${esc(c.yard)}</dd>`:""}${c.spec?`<dt>Fuel · box</dt><dd>${esc(c.spec)}</dd>`:""}${c.engine?`<dt>Engine</dt><dd>${esc(c.engine)}</dd>`:""}${c.colour?`<dt>Colour</dt><dd>${esc(c.colour)}</dd>`:""}</dl>
-        ${c.cond==="repo" ? `<span class="chip ok">Bank repossessed</span>` : c.cond==="used" ? `<span class="chip ok">Private seller</span>` : ""}
+        ${c.cond==="repo" ? `<span class="chip ok">Bank repossessed</span>` : c.cond==="used" ? `<span class="chip ok">Private seller</span>` : c.cond==="fleet" ? `<span class="chip ok">Ex-fleet taxi</span>` : ""}
         ${outsideJhb(c) ? `<span class="chip warn">Outside Jhb: transport to Jhb extra, quoted before bidding</span>` : ""}
         ${c.damage ? `<span class="chip ${/^none/i.test(c.damage) ? "ok" : "warn"}">Damage: ${esc(c.damage)}</span>` : ""}
         <p class="remarks">${esc(c.notes)}</p>
