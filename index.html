@@ -253,7 +253,7 @@ footer a{color:var(--brand-ink)}
         <label class="sr" for="q" hidden>Search</label>
         <input type="search" id="q" placeholder="Search make or model">
         <select id="type" aria-label="Body type"><option value="">All types</option><option value="sedan">Sedan / hatch</option><option value="suv">SUV</option><option value="bakkie">Bakkie</option><option value="minibus">Minibus / kombi</option><option value="truck">Truck / horse</option><option value="trailer">Trailer</option></select>
-        <select id="cond" aria-label="Condition"><option value="">Any condition</option><option value="accident">Accident-damaged</option><option value="repo">Bank repossessed</option></select>
+        <select id="cond" aria-label="Condition"><option value="">Any condition</option><option value="accident">Accident-damaged</option><option value="repo">Bank repossessed</option><option value="used">Private seller</option></select>
         <label class="toggle"><input type="checkbox" id="onlyOk" checked> Importable only</label>
       </div>
     </div>
@@ -470,7 +470,7 @@ footer a{color:var(--brand-ink)}
 # Answers:
 #   Vehicle:        year first, e.g. 2019 Toyota Hilux 2.4 GD-6 Raider D/C
 #   Type:           sedan, suv, bakkie, minibus, truck or trailer
-#   Condition:      accident or repo
+#   Condition:      accident, repo or used (private seller, no damage listed)
 #   Over 3 tonnes:  yes or no   (yes = the 10-year limit does not apply)
 #   Open bid:       rand, numbers only, e.g. 145000
 #   Location:       city where the car is. Anywhere except Johannesburg shows
@@ -553,6 +553,24 @@ Closes: 2026-10-27 14:46
 Damage: Heavy front-end: bumper, headlights, grille and radiator support missing, bonnet and left fender damaged
 Notes: Code 2. Insurance car. Starts, key available. Rear is clean. No bids yet.
 Photo: photos/kiger-1045.jpg
+
+=== CAR ===
+Ref: MB-1046
+Vehicle: 2020 Ford Ranger 2.0D Bi-Turbo Wildtrak D/C
+Type: bakkie
+Condition: used
+Over 3 tonnes: no
+Open bid: 187000
+Retail value: 437900
+Mileage: 96211
+Fuel / gearbox: Diesel · Auto
+Engine: 2.0 L bi-turbo
+Colour: White
+Location: Durban
+Closes: 2026-10-29 14:31
+Damage: None reported
+Notes: Code 2. Private seller. Starts, key available. Wildtrak double cab, automatic. No bids yet.
+Photo: photos/ranger-1046.jpg
 
 === CAR ===
 Ref:
@@ -644,7 +662,7 @@ function parseCars(text){
     }
     out.push({
       lot: f.ref || "", year, make: words.slice(0,n).join(" "), model: words.slice(n).join(" "),
-      type, cond: /repo/i.test(f.condition||"") ? "repo" : "accident", heavy: /^y/i.test(f["over 3 tonnes"]||""),
+      type, cond: /repo/i.test(f.condition||"") ? "repo" : /used|private/i.test(f.condition||"") ? "used" : "accident", heavy: /^y/i.test(f["over 3 tonnes"]||""),
       price: numOf(f["open bid"] || f["current bid"] || f["opening bid"]), priceLabel: "Open bid", retail: numOf(f["retail value"]),
       km: numOf(f.mileage), spec: f["fuel / gearbox"] || f["fuel/gearbox"] || "", engine: f.engine || "", colour: f.colour || "",
       yard: f.location || "", closes, closeAt, damage: f.damage || "", notes: f.notes || "", img: f.photo || ""
@@ -724,7 +742,7 @@ function renderCars(){
         <h3>${c.year} ${esc(c.make)}<small>${esc(c.model)}</small></h3>
         <span class="chip ${e.cls}">${e.txt}</span>
         <dl class="specs"><dt>${esc(c.priceLabel||"Starting bid")}</dt><dd>${zar(c.price)}<br><small style="color:var(--ink);font-weight:600">${r2u(c.price)}</small><br><small style="color:var(--warn);font-weight:600">+ fees &amp; VAT if won</small></dd>${c.km?`<dt>Mileage</dt><dd>${Number(c.km).toLocaleString("en-ZA").replace(/,/g," ")} km</dd>`:""}${c.yard?`<dt>Location</dt><dd>${esc(c.yard)}</dd>`:""}${c.spec?`<dt>Fuel · box</dt><dd>${esc(c.spec)}</dd>`:""}${c.engine?`<dt>Engine</dt><dd>${esc(c.engine)}</dd>`:""}${c.colour?`<dt>Colour</dt><dd>${esc(c.colour)}</dd>`:""}</dl>
-        ${c.cond==="repo" ? `<span class="chip ok">Bank repossessed</span>` : ""}
+        ${c.cond==="repo" ? `<span class="chip ok">Bank repossessed</span>` : c.cond==="used" ? `<span class="chip ok">Private seller</span>` : ""}
         ${outsideJhb(c) ? `<span class="chip warn">Outside Jhb: transport to Jhb extra, quoted before bidding</span>` : ""}
         ${c.damage ? `<span class="chip ${/^none/i.test(c.damage) ? "ok" : "warn"}">Damage: ${esc(c.damage)}</span>` : ""}
         <p class="remarks">${esc(c.notes)}</p>
