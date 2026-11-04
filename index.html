@@ -280,7 +280,7 @@ footer a{color:var(--brand-ink)}
           <label class="f full" id="bFindWrap" hidden>Describe the car you want<span class="h">Make, model, year range, budget in US$, colour, anything else</span><textarea id="bFind" rows="3" placeholder="e.g. Toyota Hilux D/C, 2018 or newer, up to US$8 000"></textarea></label>
                     <label class="f">Your maximum bid (R)<span class="h" id="bMaxUsd">The bid itself, before fees</span><input id="bMax" type="number" min="0" step="500" inputmode="numeric"></label>
           <label class="f">Where you want the car<span class="h">Delivery beyond Beitbridge is quoted per car</span><select id="bTo"></select></label>
-          <label class="f full">Vehicle condition you want<select id="bCond"><option value="accident">Repairable accident-damaged (lowest price)</option><option value="repo">Bank repossessed (little or no damage)</option><option value="either">Either, advise me</option></select></label>
+          <label class="f full">Vehicle condition you want<select id="bCond"><option value="accident">Repairable accident-damaged (lowest price)</option><option value="repo">Bank repossessed (little or no damage)</option><option value="used">Used, running (no major damage)</option><option value="either">Either, advise me</option></select></label>
           <label class="f full" id="bRepairWrap">Repair choice<select id="bRepair"><option>A · Repair in SA with your panel beaters (quote first)</option><option>B · As bought, I repair in Zimbabwe</option><option>C · Import as it is</option><option>Not sure yet, advise me</option></select></label>
           <label class="f">Full name<span class="h">As on your ID or passport</span><input id="bName" autocomplete="name"></label>
           <label class="f">WhatsApp number<input id="bPhone" type="tel" autocomplete="tel" placeholder="+263 ..."></label>
@@ -2426,7 +2426,7 @@ $("bidForm").addEventListener("submit", ev => {
   if (err.length){ $("bErr").textContent = "To continue, " + err.join(", ") + "."; $("bErr").hidden = false; return; }
   $("bErr").hidden = true;
   const carLine = c ? `REF ${c.lot} · ${c.year} ${c.make} ${c.model} (${c.yard}, closes ${c.closes})` + (outsideJhb(c) ? "\nLocation note: outside Jhb, please quote transport to Jhb before bidding" : "") : "Please find me a car: " + $("bFind").value.trim().replace(/\n+/g," ");
-  const msg = `ZIMOTOBID BID REQUEST\n\nCar: ${carLine}\nMaximum bid: ${zar($("bMax").value)} (${usd($("bMax").value/CONFIG.fx)} at R${CONFIG.fx.toFixed(2)}/US$)\nWanted in: ${$("bTo").value}${$("bTo").value.startsWith("Collect") ? "" : " (please quote delivery from Beitbridge)"}\nCondition: ${$("bCond").selectedOptions[0].text}\n${$("bCond").value==="repo" ? "" : "Repair: "+$("bRepair").value+"\n"}\nName: ${$("bName").value.trim()}\nWhatsApp: ${$("bPhone").value.trim()}\nBased in: ${$("bWhere").value}\nDeposit by: ${$("bPay").value} (${usd(CONFIG.depositUSD)}, ref ${c ? c.lot : "FIND"} ${$("bName").value.trim().split(" ").pop()})\n${$("bNotes").value.trim() ? "Notes: "+$("bNotes").value.trim()+"\n" : ""}\nAuthority: ${mandate()}\nAgreed: Yes`;
+  const msg = `ZIMOTOBID BID REQUEST\n\nCar: ${carLine}\nMaximum bid: ${zar($("bMax").value)} (${usd($("bMax").value/CONFIG.fx)} at R${CONFIG.fx.toFixed(2)}/US$)\nWanted in: ${$("bTo").value}${$("bTo").value.startsWith("Collect") ? "" : " (please quote delivery from Beitbridge)"}\nCondition: ${($("bCond").selectedOptions[0]||{text:"Either, advise me"}).text}\n${["repo","used"].includes($("bCond").value) ? "" : "Repair: "+$("bRepair").value+"\n"}\nName: ${$("bName").value.trim()}\nWhatsApp: ${$("bPhone").value.trim()}\nBased in: ${$("bWhere").value}\nDeposit by: ${$("bPay").value} (${usd(CONFIG.depositUSD)}, ref ${c ? c.lot : "FIND"} ${$("bName").value.trim().split(" ").pop()})\n${$("bNotes").value.trim() ? "Notes: "+$("bNotes").value.trim()+"\n" : ""}\nAuthority: ${mandate()}\nAgreed: Yes`;
   $("pRef").textContent = `${c ? c.lot : "FIND"} ${$("bName").value.trim().split(" ").pop()}`;
   $("bMsg").textContent = msg; $("bWa").href = waLink(msg);
   $("bOut").scrollIntoView({behavior:"smooth", block:"nearest"});
@@ -2535,9 +2535,9 @@ document.addEventListener("click", ev => {
   if (view){ if (!$("car-"+view.dataset.view)){ $("q").value=""; $("type").value=""; renderCars(); }
     const t = $("car-"+view.dataset.view); if (t){ t.scrollIntoView({behavior:"smooth", block:"center"}); t.style.outline="3px solid var(--plate)"; setTimeout(()=>t.style.outline="",2000); } }
   if (cost){ setCalc(CARS[cost.dataset.cost]); $("calc").scrollIntoView({behavior:"smooth"}); }
-  if (bid && !bid.disabled){ fillCarSelect(bid.dataset.bid); $("bCond").value = CARS[bid.dataset.bid].cond || "accident"; $("bCond").dispatchEvent(new Event("change")); $("bMax").value = Math.round(CARS[bid.dataset.bid].price*1.1/1000)*1000; $("bMax").dispatchEvent(new Event("input"));$("bid").scrollIntoView({behavior:"smooth"}); }
+  if (bid && !bid.disabled){ fillCarSelect(bid.dataset.bid); {const cd=CARS[bid.dataset.bid].cond; $("bCond").value = cd==="fleet" ? "used" : (cd || "accident"); if(!$("bCond").value) $("bCond").value="either";} $("bCond").dispatchEvent(new Event("change")); $("bMax").value = Math.round(CARS[bid.dataset.bid].price*1.1/1000)*1000; $("bMax").dispatchEvent(new Event("input"));$("bid").scrollIntoView({behavior:"smooth"}); }
 });
-$("bCond").addEventListener("change", () => { $("bRepairWrap").hidden = $("bCond").value === "repo"; });
+$("bCond").addEventListener("change", () => { $("bRepairWrap").hidden = ["repo","used"].includes($("bCond").value); });
 ["q","type","cond","onlyOk"].forEach(id => $(id).addEventListener("input", renderCars));
 calcIds.forEach(id => $(id).addEventListener("input", calc));
 function toggleFind(){ $("bFindWrap").hidden = $("bCar").value !== "find"; }
